@@ -85,8 +85,18 @@ body {
   letter-spacing: 0.15em;
   margin-bottom: 1.2rem;
 }
-
+.ending {
+  position: relative;
+}
 .ending p {
   font-size: 1.6rem;
   font-weight: 500;
+}
+.ending > .thank-you-section {
+  position: absolute;
+  right: 20px;
+  bottom: 0px;
+}
+.ending > .thank-you-section p {
+  font-size: 1rem;
 }
