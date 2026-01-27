@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farewell</title>
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              poppins: ["Poppins", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="style.css" />
+    <!-- GSAP -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  </head>
+
+  <body class="font-poppins bg-white text-black">
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur">
+      <div class="mx-auto px-[10vw] py-4 flex justify-between items-center">
+        <!-- Brand -->
+        <span class="text-lg tracking-[0.03em] font-bold">
+          Some Things, Quietly
+        </span>
+
+        <!-- Nav -->
+        <a
+          href="/"
+          class="text-xs tracking-[0.02em] font-medium text-black opacity-80 hover:opacity-100 transition"
+        >
+          Home
+        </a>
+      </div>
+    </nav>
+    <!-- Farewell Timer Screen -->
+    <section class="min-h-screen w-full flex flex-col justify-center px-4">
+      <div class="flex-1 flex flex-col justify-center items-center">
+        <p
+          class="text-xs sm:text-sm tracking-[0.35em] uppercase opacity-60 mb-10"
+        >
+          Farewell In
+        </p>
+
+        <!-- Countdown -->
+        <div
+          class="w-full max-w-7xl grid grid-cols-3 gap-4 sm:gap-8 text-center"
+        >
+          <!-- Days -->
+          <div>
+            <p
+              id="days"
+              class="font-bold leading-none text-[clamp(2.5rem,20vw,71rem)]"
+            >
+              00
+            </p>
+            <p
+              class="mt-2 text-[0.6rem] sm:text-xs tracking-[0.25em] opacity-60"
+            >
+              DAYS
+            </p>
+          </div>
+
+          <!-- Hours -->
+          <div>
+            <p
+              id="hours"
+              class="font-bold leading-none text-[clamp(2.5rem,20vw,71rem)]"
+            >
+              00
+            </p>
+            <p
+              class="mt-2 text-[0.6rem] sm:text-xs tracking-[0.25em] opacity-60"
+            >
+              HOURS
+            </p>
+          </div>
+
+          <!-- Minutes -->
+          <div>
+            <p
+              id="minutes"
+              class="font-bold leading-none text-[clamp(2.5rem,20vw,71rem)]"
+            >
+              00
+            </p>
+            <p
+              class="mt-2 text-[0.6rem] sm:text-xs tracking-[0.25em] opacity-60"
+            >
+              MINUTES
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end py-2">
+        <div class="flex items-center gap-1">
+          <p class="font-light text-xs">Farewell Day Plan</p>
+          <div class="h-[10px] w-[10px]">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+              <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+              <path
+                d="M297.4 566.6C309.9 579.1 330.2 579.1 342.7 566.6L502.7 406.6C515.2 394.1 515.2 373.8 502.7 361.3C490.2 348.8 469.9 348.8 457.4 361.3L352 466.7L352 96C352 78.3 337.7 64 320 64C302.3 64 288 78.3 288 96L288 466.7L182.6 361.3C170.1 348.8 149.8 348.8 137.3 361.3C124.8 373.8 124.8 394.1 137.3 406.6L297.3 566.6z"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="farewell-interaction"
+      class="min-h-screen w-full flex items-center justify-center px-6"
+    >
+      <!-- Mobile Message -->
+      <div id="mobileMessage" class="hidden text-center">
+        <p class="text-lg font-medium">
+          Please open this on a laptop<br />
+          to see the Farewell Day plan 🤍
+        </p>
+      </div>
+
+      <!-- Desktop Interaction -->
+      <div id="desktopContent" class="hidden text-center relative">
+        <p class="text-xl font-medium mb-8">
+          Do you want to see the Farewell Day plan?
+        </p>
+
+        <div class="flex gap-6 justify-center relative">
+          <button
+            id="yesBtn"
+            class="px-6 py-2 border border-black text-black text-sm relative"
+          >
+            Yes
+          </button>
+
+          <button
+            id="noBtn"
+            class="px-6 py-2 border border-black text-black text-sm"
+          >
+            No
+          </button>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div id="resultMessage" class="hidden text-lg font-medium"></div>
+
+      <!-- Reward Section -->
+      <div id="rewardSection" class="hidden text-center">
+        <p class="text-xl font-medium mb-6">Mla Kay Milnar ?? 🤔</p>
+
+        <input
+          id="rewardInput"
+          type="text"
+          placeholder="Type here..."
+          class="border border-black px-4 py-2 mb-4 w-64 text-center"
+        />
+
+        <div class="flex gap-4 justify-center">
+          <button id="submitBtn" class="px-5 py-2 border border-black text-sm">
+            Submit
+          </button>
+          <button id="cancelBtn" class="px-5 py-2 border border-black text-sm">
+            Cancel
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div
+        id="loadingState"
+        class="hidden flex flex-col items-center gap-4 text-center"
+      >
+        <div
+          class="h-6 w-6 border-2 border-black border-t-transparent rounded-full animate-spin"
+        ></div>
+        <p class="text-sm font-medium">Submitting…</p>
+      </div>
+    </section>
+
+    <script src="farewell.js"></script>
+  </body>
+</html>
