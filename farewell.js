@@ -1,6 +1,6 @@
 // SET YOUR FAREWELL DATE HERE
 // Format: YYYY-MM-DDTHH:MM:SS
-const farewellDate = new Date("2026-02-14T00:00:00").getTime();
+const farewellDate = new Date("2026-02-16T00:00:00").getTime();
 
 function updateTimer() {
   const now = new Date().getTime();
