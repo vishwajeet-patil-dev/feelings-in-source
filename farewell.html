@@ -13,6 +13,8 @@
       rel="stylesheet"
     />
 
+    <link rel="stylesheet" href="style.css" />
+
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -123,77 +125,22 @@
       </div>
     </section>
 
+    <!-- Actual Day Plan Section -->
     <section
-      id="farewell-interaction"
-      class="min-h-screen w-full flex items-center justify-center px-6"
+      id="actual-plan"
+      class="min-h-screen w-full px-[10vw] py-24 bg-white"
     >
-      <!-- Mobile Message -->
-      <div id="mobileMessage" class="hidden text-center">
-        <p class="text-lg font-medium">
-          Please open this on a laptop<br />
-          to see the Farewell Day plan 🤍
-        </p>
-      </div>
-
-      <!-- Desktop Interaction -->
-      <div id="desktopContent" class="hidden text-center relative">
-        <p class="text-xl font-medium mb-8">
-          Do you want to see the Farewell Day plan?
-        </p>
-
-        <div class="flex gap-6 justify-center relative">
-          <button
-            id="yesBtn"
-            class="px-6 py-2 border border-black text-black text-sm relative"
-          >
-            Yes
-          </button>
-
-          <button
-            id="noBtn"
-            class="px-6 py-2 border border-black text-black text-sm"
-          >
-            No
-          </button>
-        </div>
-      </div>
-
-      <!-- Result -->
-      <div id="resultMessage" class="hidden text-lg font-medium"></div>
-
-      <!-- Reward Section -->
-      <div id="rewardSection" class="hidden text-center">
-        <p class="text-xl font-medium mb-6">Mla Kay Milnar ?? 🤔</p>
-
-        <input
-          id="rewardInput"
-          type="text"
-          placeholder="Type here..."
-          class="border border-black px-4 py-2 mb-4 w-64 text-center"
-        />
-
-        <div class="flex gap-4 justify-center">
-          <button id="submitBtn" class="px-5 py-2 border border-black text-sm">
-            Submit
-          </button>
-          <button id="cancelBtn" class="px-5 py-2 border border-black text-sm">
-            Cancel
-          </button>
-        </div>
-      </div>
-
-      <!-- Loading -->
-      <div
-        id="loadingState"
-        class="hidden flex flex-col items-center gap-4 text-center"
+      <p
+        class="text-xs tracking-[0.35em] uppercase opacity-60 text-center mb-20"
       >
-        <div
-          class="h-6 w-6 border-2 border-black border-t-transparent rounded-full animate-spin"
-        ></div>
-        <p class="text-sm font-medium">Submitting…</p>
-      </div>
-    </section>
+        The Day, As It Unfolds
+      </p>
 
+      <div
+        id="planContainer"
+        class="flex flex-col gap-24 max-w-5xl mx-auto"
+      ></div>
+    </section>
     <script src="farewell.js"></script>
   </body>
 </html>

@@ -28,114 +28,143 @@ function updateTimer() {
 updateTimer();
 setInterval(updateTimer, 1000);
 
-const isMobile = window.innerWidth < 768;
+/* ================= ACTUAL DAY PLAN ================= */
 
-const mobileMessage = document.getElementById("mobileMessage");
-const desktopContent = document.getElementById("desktopContent");
-const resultMessage = document.getElementById("resultMessage");
-const rewardSection = document.getElementById("rewardSection");
+const plans = [
+  {
+    title: "Picking Up the Princess",
+    datetime: "2026-02-16T05:00:00",
+    location: "Hostel",
+    image: "/assets/plans/0.png",
+    alwaysVisible: true,
+  },
+  {
+    title: "A New Chapter Unfolds",
+    datetime: "2026-02-16T05:00:00",
+    location: "Somewhere Special",
+    image: "/assets/plans/0.png",
+    alwaysVisible: true,
+    type: "gift",
+  },
+  {
+    title: "Some Beginnings Meant to be Blessed",
+    datetime: "2026-02-16T05:30:00",
+    location: "Dagdusheth Halwai Ganpati Mandir, Pune",
+    image: "/assets/plans/1.png",
+    alwaysVisible: true,
+  },
+  {
+    title: "Some Journeys Don't Need Words",
+    datetime: "2026-02-16T06:00:00",
+    location: "Bike Ride | Tamhini Ghat, Mulashi, Pune",
+    image: "/assets/plans/2.png",
+  },
+  {
+    title: "One Last Walk",
+    datetime: "2026-02-16T11:00:00",
+    location: "Pashan Tekdi",
+    image: "/assets/plans/1.png",
+  },
+  {
+    title: "Goodbyes, Slowly",
+    datetime: "2026-02-16T14:00:00",
+    location: "Somewhere Familiar",
+    image: "/assets/plans/1.png",
+  },
+];
 
-const yesBtn = document.getElementById("yesBtn");
-const noBtn = document.getElementById("noBtn");
+const planContainer = document.getElementById("planContainer");
 
-let yesAttempts = 0;
+function isRevealed(planTime, alwaysVisible = false) {
+  if (alwaysVisible) return true;
 
-// Device check
-if (isMobile) {
-  mobileMessage.classList.remove("hidden");
-} else {
-  desktopContent.classList.remove("hidden");
+  const now = new Date().getTime();
+  const revealTime = new Date(planTime).getTime() - 15 * 60 * 1000; // 15 mins before
+  return now >= revealTime;
 }
 
-// No button
-noBtn.addEventListener("click", () => {
-  desktopContent.classList.add("hidden");
-  resultMessage.textContent = "Okay 🙂";
-  resultMessage.classList.remove("hidden");
-});
+function renderPlans() {
+  planContainer.innerHTML = "";
 
-yesBtn.addEventListener("click", () => {
-  if (yesAttempts >= 5) {
-    desktopContent.classList.add("hidden");
-    rewardSection.classList.remove("hidden");
-  }
-});
+  plans.forEach((plan, index) => {
+    const revealed = isRevealed(plan.datetime, plan.alwaysVisible);
+    const isOdd =
+      plans.filter((p) => p.type !== "gift").indexOf(plan) % 2 === 0;
 
-// Cancel reward
-document.getElementById("cancelBtn").addEventListener("click", () => {
-  rewardSection.classList.add("hidden");
-  resultMessage.textContent = "Okay 🙂";
-  resultMessage.classList.remove("hidden");
-});
+    const card = document.createElement("div");
+    card.className = `relative transition-all duration-700
+      ${revealed ? "opacity-100 blur-0" : "opacity-40 blur-lg"}
+    `;
+    //     ${new Date(plan.datetime).toLocaleDateString("en-IN", {
+    //   weekday: "long",
+    //   day: "numeric",
+    //   month: "long",
+    // })} ·
 
-// Submit reward → API call
+    card.innerHTML =
+      plan.type === "gift"
+        ? `<section class="px-4 text-black">
+  <div class="mx-auto backdrop-blur-md px-6">
+    
+    <div class="flex items-center justify-center">
+      <div class="flex items-center gap-4">
+        <p class="text-xs tracking-widest uppercase ">
+          A small pause :
+        </p>
+        <h3 class="text-base font-medium ">
+          A little something for you
+        </h3>
+      </div>
+    </div>
+  </div>
+</section>
+`
+        : `
+    <div class="absolute top-0 left-1/2 transform -translate-y-1/2 -translate-x-1/2 text-center bg-white px-2 "><p class="text-xs tracking-[0.3em] opacity-60">
 
-const loadingState = document.getElementById("loadingState");
+        ${new Date(plan.datetime).toLocaleTimeString("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
+        </p></div>
+      <div class="border-y border-black border-opacity-30 flex flex-col md:flex-row gap-10 items-center py-6  ${isOdd ? "" : "md:flex-row-reverse"}">
+      
+      <!-- Image -->
+      <div class="w-full md:w-[45%] overflow-hidden">
+        <img
+        src="${plan.image}"
+        alt="${plan.title}"
+        class="h-full w-full object-contain grayscale rounded-lg ${revealed ? "grayscale-0" : ""}"
+        />
+      </div>
 
-document.getElementById("submitBtn").addEventListener("click", async () => {
-  const value = document.getElementById("rewardInput").value.trim();
+      <!-- Content -->
+      <div class="flex-1 text-left">
+        
+        <p class="text-5xl uppercase text-gray-200 font-bold mb-4">
+        ${revealed ? plan.title : "Yet to be revealed"}
+        </p>
 
-  if (!value) {
-    alert("Type something 😄");
-    return;
-  }
+        <p class="text-sm opacity-40 text-end">
+        ${revealed ? plan.location : "This moment will reveal itself, quietly."}
+        </p>
+      </div>
+      </div>
+    `;
 
-  // Hide form, show loader
-  rewardSection.classList.add("hidden");
-  loadingState.classList.remove("hidden");
+    planContainer.appendChild(card);
 
-  try {
-    await fetch("https://formspree.io/f/xjgwpore", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        answer: value,
-        page: "farewell",
-        timestamp: new Date().toISOString(),
-      }),
-    });
+    if (revealed) {
+      gsap.from(card, {
+        opacity: 0,
+        y: 40,
+        duration: 1,
+        ease: "power3.out",
+        delay: index * 0.1,
+      });
+    }
+  });
+}
 
-    // Stop loading
-    loadingState.classList.add("hidden");
-
-    // Final message after submit
-    resultMessage.textContent = "I’ll think on it 🤍";
-    resultMessage.classList.remove("hidden");
-  } catch (error) {
-    loadingState.classList.add("hidden");
-    alert("Something went wrong. Try again.");
-    rewardSection.classList.remove("hidden");
-  }
-});
-
-yesBtn.addEventListener("mouseenter", () => {
-  if (yesAttempts < 5) {
-    yesAttempts++;
-
-    // Random movement range
-    const x = gsap.utils.random(-200, 200);
-    const y = gsap.utils.random(-120, 120);
-
-    gsap.to(yesBtn, {
-      x,
-      y,
-      duration: 0.4,
-      ease: "power2.out",
-    });
-  }
-});
-
-gsap.to(yesBtn, {
-  x,
-  y,
-  rotation: gsap.utils.random(-10, 10),
-  duration: 0.4,
-  ease: "power2.out",
-});
-gsap.from(yesBtn, {
-  scale: 0.9,
-  duration: 0.2,
-  ease: "back.out(2)",
-});
+renderPlans();
+setInterval(renderPlans, 60 * 1000); // refresh every minute
